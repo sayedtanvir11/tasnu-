@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Birthday Tasnu</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body, html { width:100%; height:100%; font-family:'Comic Sans MS', cursive; overflow:hidden; background:black; transition:background-color 0.5s; }
+    .scene { position:absolute; width:100%; height:100%; display:flex; justify-content:center; align-items:center; flex-direction:column; background:radial-gradient(#004db1,#000); text-align:center; opacity:0; pointer-events:none; transform:scale(0.95); transition:transform 0.5s, opacity 1s; }
+    .active { opacity:1; pointer-events:auto; transform:scale(1); }
+    h1,h2,p { color:white; text-shadow:0 0 10px #916d7f; margin:20px; opacity:0; animation:fadeInText 1.5s forwards; }
+    #scene1.active h1 { animation-delay:0.3s; }
+    @keyframes fadeInText { from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
+    .rainbow-text { background:linear-gradient(to right,#d43636,#aa4141,#e00283,#cf3e3e,#581a1a,#f00,#f00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:shine 3s linear infinite; }
+    @keyframes shine { 0%{background-position:0} 100%{background-position:100%} }
+    .image img { width:220px; height:220px; border-radius:50%; border:5px solid white; object-fit:cover; animation:glow 2s infinite alternate; }
+    @keyframes glow { 0%{box-shadow:0 0 20px #ff99cc,0 0 30px #dd69a3;} 100%{box-shadow:0 0 40px #ff66b2,0 0 60px #ff3399;} }
+    button { margin-top:20px; padding:10px 20px; font-size:1.2em; background:#af2168; color:white; border:none; border-radius:10px; cursor:pointer; box-shadow:0 0 10px #bb0e64; transition:background 0.3s; }
+    button:hover { background:#b3286d; }
+    .fireworks, .stars { position:absolute; width:100%; height:100%; top:0; left:0; pointer-events:none; z-index:-1; background-size:cover; }
+    .fireworks { background:url('https://i.imgur.com/Ns7mR0p.gif') center no-repeat; opacity:0.3; }
+    .stars { background:url('https://i.ibb.co/6m9tG5H/stars-bg.png') repeat; animation:twinkle 10s linear infinite; z-index:-2; }
+    @keyframes twinkle { 0%{background-position:0 0} 100%{background-position:100% 100%} }
+    .hearts-container { position:fixed; bottom:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:1; }
+    .heart { position:absolute; width:20px; height:20px; background:rgb(219,219,219); transform:rotate(45deg); animation:floatUp 5s linear infinite; }
+    .heart::before, .heart::after { content:''; position:absolute; width:20px; height:20px; background:pink; border-radius:50%; }
+    .heart::before { top:-10px; left:0; }
+    .heart::after { top:0; left:-10px; }
+    @keyframes floatUp { 0%{bottom:-10%;opacity:1;transform:translateX(0) scale(1) rotate(45deg);} 100%{bottom:110%;opacity:0;transform:translateX(50px) scale(1.5) rotate(45deg);} }
+    audio { display:block; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); opacity:0; animation:fadeInAudio 3s forwards; }
+    @keyframes fadeInAudio { 0%{opacity:0;} 100%{opacity:1;} }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="fireworks"></div>
+
+ <div class="scene active" id="scene1">
+   <h1 class="Ns7mR0p">💖Happy Birthday babe 🎂</h1>
+    <button onclick="nextScene()">Next</button>
+  </div>
+
+  <div class="scene" id="scene2">
+    <h2>This is My sweetest friend Tasnu✨ 💖</h2>
+    <div class="image"><img src="img.jpg" alt="Tasnu"></div>
+    <button onclick="nextScene()">Next</button>
+  </div>
+
+  <div class="scene" id="scene3">
+    <h1>Dear Tasnu,</h1>
+    <h2>You are more than a friend — you're my light, laughter & calm.<br>May this year bring you joy & love you truly deserve.</h2>
+    <h1>Happy Birthday!</h1>
+    <button onclick="nextScene()">Next</button>
+  </div>
+
+  <div class="scene" id="scene4">
+    <h1>🎁 Happy Birthday Tasnu! 🎊</h1>
+    <h2>Enjoy your special day. With love, always. 💐</h2>
+    <button onclick="showConfetti()">💖💖💖</button>
+  </div>
+
+  <div class="hearts-container" id="hearts-container"></div>
+
+  <audio controls autoplay loop>
+    <source src="11.mp3" type="audio/mpeg">
+  </audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    let current=1;
+    function nextScene(){
+      document.getElementById('scene'+current).classList.remove('active');
+      current++;
+      const next=document.getElementById('scene'+current);
+      if(next){ next.classList.add('active'); if(current===4){ document.querySelector('audio').style.opacity=1; showConfetti(); } }
+    }
+    function createHeart(){
+      const h=document.createElement('div');
+      h.className='heart';
+      h.style.left=Math.random()*100+'vw';
+      h.style.animationDuration=4+Math.random()*3+'s';
+      document.getElementById('hearts-container').appendChild(h);
+      setTimeout(()=>h.remove(),7000);
+    }
+    setInterval(createHeart,500);
+    function showConfetti(){
+      const end=Date.now()+5e3,defaults={startVelocity:30,spread:360,ticks:60,zIndex:9999};
+      const interval=setInterval(()=>{
+        const t=end-Date.now();
+        if(t<=0) return clearInterval(interval);
+        confetti({particleCount:50,origin:{x:Math.random()*0.8+0.1,y:Math.random()-0.2},...defaults});
+      },250);
+    }
+  </script>
+</body>
+</html>
